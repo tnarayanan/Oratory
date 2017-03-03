@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_readthrough"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.tejas.oratory.Memorize">
+
+    <ImageView
+        app:srcCompat="@drawable/logo"
+        android:id="@+id/imageView"
+        android:layout_width="100dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_height="100dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:id="@+id/textSegment"
+        tools:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginTop="33dp"
+        android:textColor="@color/shadow"
+        android:layout_below="@+id/imageView"
+        android:layout_alignParentStart="true"
+        android:textSize="18sp" />
+
+    <Button
+        android:text="Next"
+        android:layout_width="90dp"
+        android:layout_height="45dp"
+        android:id="@+id/next"
+        android:background="@color/stone"
+        android:textColor="@android:color/white"
+        android:layout_alignTop="@+id/record"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:text="Start Speaking"
+        android:layout_height="wrap_content"
+        android:id="@+id/record"
+        android:textColor="@android:color/white"
+        android:background="@color/stone"
+        android:layout_width="150dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:text="Override"
+        android:layout_width="90dp"
+        android:layout_height="45dp"
+        android:id="@+id/override"
+        android:textColor="@android:color/white"
+        android:background="@color/stone"
+        android:layout_above="@+id/next"
+        android:layout_alignStart="@+id/next"
+        android:layout_marginBottom="12dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/stage"
+        android:width="100dp"
+        android:textAlignment="center"
+        android:layout_above="@+id/override"
+        android:layout_centerHorizontal="true"
+        android:textSize="24sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:id="@+id/wrongText"
+        android:layout_height="125dp"
+        android:textColor="@color/shadow"
+        android:layout_above="@+id/stage"
+        android:layout_alignParentStart="true"
+        android:textSize="18sp" />
+
+</RelativeLayout>

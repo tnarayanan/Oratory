@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">@color/mist</color>
+    <color name="colorPrimaryDark">#7994A8</color>
+    <color name="colorAccent">@color/stone</color>
+    <color name="mist">#90AFC5</color>
+    <color name="stone">#336B87</color>
+    <color name="autumn">#763626</color>
+    <color name="shadow">#2A3132</color>
+</resources>
