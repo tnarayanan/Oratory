@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">@color/mist</color>
-    <color name="colorPrimaryDark">#7994A8</color>
+    <color name="colorPrimary">@color/newColor1</color>
+    <color name="colorPrimaryDark">@color/newColor1Dark</color>
     <color name="colorAccent">@color/stone</color>
     <color name="mist">#90AFC5</color>
-    <color name="stone">#336B87</color>
+    <color name="mistDark">#7994A8</color>
+    <color name="stone">#336b87</color>
     <color name="autumn">#763626</color>
     <color name="shadow">#2A3132</color>
+
+    <color name="newColor">#1c775f</color>
+    <color name="newColorDark">#145947</color>
+    <color name="newColor1">#36e3b4</color>
+    <color name="newColor1Dark">#27b28c</color>
+    <color name="newColorButton">#23a384</color>
 </resources>

@@ -11,47 +11,46 @@
     tools:context="com.example.tejas.lah2.MainActivity">
 
     <TextView
-        android:text="Enter Your Text Below"
+        android:id="@+id/topText"
         android:layout_width="500px"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:id="@+id/topText"
-        android:textAppearance="@style/TextAppearance.AppCompat"
-        android:textSize="25sp"
-        android:layout_centerHorizontal="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="false"
-        android:layout_alignParentStart="false"
-        android:layout_alignParentRight="false"
-        android:layout_alignParentLeft="false"
         android:layout_centerInParent="false"
         android:layout_centerVertical="false"
-        tools:textAlignment="center"
-        android:textColor="@color/shadow" />
+        android:layout_marginTop="28dp"
+        android:text="Enter Your Text Below"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textColor="@color/shadow"
+        android:textSize="25sp"
+        tools:textAlignment="center" />
 
     <Button
-        android:text="Start"
+        android:id="@+id/start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="14dp"
-        android:id="@+id/start"
         android:layout_centerInParent="true"
-        android:background="@color/stone"
+        android:layout_marginBottom="14dp"
+        android:background="@color/newColorButton"
+        android:text="Start"
         android:textColor="@android:color/white" />
 
     <EditText
-        android:layout_width="wrap_content"
-        android:inputType="textMultiLine"
-        android:ems="10"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
         android:id="@+id/fullText"
-        tools:layout_width="match_parent"
-        android:layout_height="500px"
-        android:layout_centerInParent="true"
-        android:hint="Enter Text Here"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:textColorLink="@color/stone" />
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/start"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/topText"
+        android:ems="10"
+        android:hint="Enter text here"
+        android:inputType="textMultiLine"
+        android:textAlignment="center"
+        android:textColor="@color/stone" />
 
 </RelativeLayout>

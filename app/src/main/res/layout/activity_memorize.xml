@@ -11,73 +11,66 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.tejas.oratory.Memorize">
 
-    <ImageView
-        app:srcCompat="@drawable/logo"
-        android:id="@+id/imageView"
-        android:layout_width="100dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_height="100dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:id="@+id/textSegment"
-        tools:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_marginTop="33dp"
-        android:textColor="@color/shadow"
-        android:layout_below="@+id/imageView"
-        android:layout_alignParentStart="true"
-        android:textSize="18sp" />
-
     <Button
-        android:text="Next"
-        android:layout_width="90dp"
-        android:layout_height="45dp"
         android:id="@+id/next"
-        android:background="@color/stone"
-        android:textColor="@android:color/white"
-        android:layout_alignTop="@+id/record"
-        android:layout_centerHorizontal="true" />
-
-    <Button
-        android:text="Start Speaking"
-        android:layout_height="wrap_content"
-        android:id="@+id/record"
-        android:textColor="@android:color/white"
-        android:background="@color/stone"
-        android:layout_width="150dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
-
-    <Button
-        android:text="Override"
         android:layout_width="90dp"
         android:layout_height="45dp"
+        android:layout_alignTop="@+id/record"
+        android:layout_centerHorizontal="true"
+        android:background="@color/newColorButton"
+        android:text="Next"
+        android:textColor="@android:color/white" />
+
+    <Button
+        android:id="@+id/record"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@color/newColorButton"
+        android:text="Start Speaking"
+        android:textColor="@android:color/white" />
+
+    <Button
         android:id="@+id/override"
-        android:textColor="@android:color/white"
-        android:background="@color/stone"
+        android:layout_width="90dp"
+        android:layout_height="45dp"
         android:layout_above="@+id/next"
         android:layout_alignStart="@+id/next"
-        android:layout_marginBottom="12dp" />
+        android:layout_marginBottom="12dp"
+        android:background="@color/newColorButton"
+        android:text="Override"
+        android:textColor="@android:color/white" />
 
     <TextView
+        android:id="@+id/stage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/stage"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:width="100dp"
         android:textAlignment="center"
-        android:layout_above="@+id/override"
-        android:layout_centerHorizontal="true"
-        android:textSize="24sp" />
+        android:textColor="@color/stone"
+        android:textSize="36sp" />
 
     <TextView
-        android:layout_width="match_parent"
-        android:id="@+id/wrongText"
-        android:layout_height="125dp"
-        android:textColor="@color/shadow"
-        android:layout_above="@+id/stage"
+        android:id="@+id/textSegment"
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
         android:layout_alignParentStart="true"
-        android:textSize="18sp" />
+        android:layout_below="@+id/stage"
+        android:layout_marginTop="22dp"
+        android:textAlignment="center"
+        android:textColor="@color/shadow"
+        android:textSize="18sp"
+        tools:layout_width="match_parent" />
+
+    <TextView
+        android:id="@+id/wrongText"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:layout_above="@+id/override"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

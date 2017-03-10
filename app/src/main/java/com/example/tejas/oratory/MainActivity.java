@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -42,23 +43,47 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    public static ArrayList<String> makeParagraphs(String str){
+    public ArrayList<String> makeParagraphs(String str){
         ArrayList<String> paragraphs = new ArrayList<String>();
-        int lastParagraph = 0;
         int i = 0;
 
-        while (str.charAt(i) < 32) {
+        while (str.charAt(i) <= 32) {
             i++;
         }
 
-        for(int j = i; j < str.length(); j++){
-            if(str.charAt(j) < 32) {
+        int lastParagraph = i;
+
+/*
+        for (int k = 0; k < str.length(); k++) {
+            System.out.print(str.charAt(k));
+            System.out.print(" ");
+            System.out.println((int) str.charAt(k));
+        }
+
+*/
+        int spaceStreak = 0;
+        for(int j = i + 1; j < str.length(); j++){
+            int currChar = str.charAt(j);
+            if(currChar < 32) {
                 paragraphs.add(str.substring(lastParagraph, j));
-                while (str.charAt(j) < 32) {
+                while (str.charAt(j) < 32 && j < str.length()) {
                     j++;
                 }
                 lastParagraph = j;
                 j--;
+            } else if (currChar == 32 || currChar == 160) {
+                spaceStreak++;
+                if (spaceStreak > 1) {
+                    paragraphs.add(str.substring(lastParagraph, j - 2));
+                    while (str.charAt(j) <= 32 && j < str.length()) {
+                        j++;
+                    }
+                    lastParagraph = j;
+                    j--;
+                }
+
+            } else {
+                spaceStreak = 0;
             }
         }
         paragraphs.add(str.substring(lastParagraph, str.length()));
