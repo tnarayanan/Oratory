@@ -175,6 +175,9 @@ public class Memorize extends AppCompatActivity {
                         } else {
                             System.out.println("Here----------------");
                             if ((COUNT + 1) % NUM_OF_PARAGRAPHS == 0) {
+                                if (COUNT + 1 > 3 * NUM_OF_PARAGRAPHS) {
+                                    COUNT -= NUM_OF_PARAGRAPHS;
+                                }
                                 nextStageScreen();
                             } else {
                                 COUNT++;
@@ -204,7 +207,12 @@ public class Memorize extends AppCompatActivity {
 
     private void nextStageScreen() {
         System.out.println("IN NEXT STAGE SCREEN");
-        textSegment.setText("Move on to the next section!");
+        if (COUNT + 1 >= 3 * NUM_OF_PARAGRAPHS) {
+            textSegment.setText("Congrats! You've completed all three stages! If you wish, click Next to continue memorizing!");
+        } else {
+            textSegment.setText("Move on to the next section!");
+        }
+
         next.setVisibility(View.VISIBLE);
         record.setVisibility(View.INVISIBLE);
     }
