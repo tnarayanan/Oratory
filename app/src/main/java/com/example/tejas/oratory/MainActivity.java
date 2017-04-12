@@ -10,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
     Button progress;
@@ -44,7 +45,14 @@ public class MainActivity extends AppCompatActivity {
 
 
     public ArrayList<String> makeParagraphs(String str){
-        ArrayList<String> paragraphs = new ArrayList<String>();
+        /*
+        String PARAGRAPH_SPLIT_REGEX = "(?m)(?=^\\s{4})";
+        ArrayList<String> paragraphs = new ArrayList<String>(Arrays.asList(str.split(PARAGRAPH_SPLIT_REGEX)));
+
+        return paragraphs;
+         */
+
+        ArrayList<String> paragraphs = new ArrayList<>();
         int i = 0;
 
         while (str.charAt(i) <= 32) {
@@ -53,14 +61,16 @@ public class MainActivity extends AppCompatActivity {
 
         int lastParagraph = i;
 
-/*
+
         for (int k = 0; k < str.length(); k++) {
             System.out.print(str.charAt(k));
             System.out.print(" ");
             System.out.println((int) str.charAt(k));
         }
 
-*/
+
+
+
         int spaceStreak = 0;
         for(int j = i + 1; j < str.length(); j++){
             int currChar = str.charAt(j);
@@ -88,6 +98,8 @@ public class MainActivity extends AppCompatActivity {
         }
         paragraphs.add(str.substring(lastParagraph, str.length()));
         return paragraphs;
+
+
     }
 }
 
