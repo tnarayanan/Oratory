@@ -1,7 +1,10 @@
 package com.example.tejas.oratory;
 
+import android.app.ActivityManager;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
@@ -45,6 +48,9 @@ public class Memorize extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_memorize);
+        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.logo);
+        int color = getResources().getColor(R.color.white);
+        setTaskDescription(new ActivityManager.TaskDescription("Oratory", icon, color));
 
         //for color
         // getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#90AFC5")));

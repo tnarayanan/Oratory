@@ -8,7 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.tejas.lah2.MainActivity">
+    tools:context="com.example.tejas.oratory.MainActivity">
 
     <TextView
         android:id="@+id/topText"
@@ -31,12 +31,31 @@
         android:id="@+id/start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_centerInParent="true"
         android:layout_marginBottom="14dp"
         android:background="@color/newColorButton"
         android:text="Start"
+        android:textColor="@android:color/white"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:id="@+id/load"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/newColorButton"
+        android:text="Load"
+        android:textColor="@android:color/white"
+        android:layout_below="@+id/fullText"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/fullText"
+        android:background="@color/newColorButton"
+        android:text="Delete"
         android:textColor="@android:color/white" />
 
     <EditText
@@ -50,7 +69,7 @@
         android:ems="10"
         android:hint="Enter text here"
         android:inputType="textMultiLine"
-        android:textAlignment="center"
+        android:textAlignment="textStart"
         android:textColor="@color/stone" />
 
 </RelativeLayout>
