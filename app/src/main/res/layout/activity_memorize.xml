@@ -24,12 +24,12 @@
     <Button
         android:id="@+id/record"
         android:layout_width="150dp"
-        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:background="@color/newColorButton"
         android:text="Start Speaking"
-        android:textColor="@android:color/white" />
+        android:textColor="@android:color/white"
+        android:layout_height="45dp" />
 
     <Button
         android:id="@+id/override"
@@ -63,7 +63,8 @@
         android:textAlignment="center"
         android:textColor="@color/shadow"
         android:textSize="18sp"
-        tools:layout_width="match_parent" />
+        tools:layout_width="match_parent"
+        android:scrollbars="vertical"/>
 
     <TextView
         android:id="@+id/wrongText"

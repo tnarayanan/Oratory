@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -55,6 +56,7 @@ public class Memorize extends AppCompatActivity {
         //for color
         // getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#90AFC5")));
         textSegment = (TextView) findViewById(R.id.textSegment);
+        textSegment.setMovementMethod(new ScrollingMovementMethod());
         wrongText = (TextView) findViewById(R.id.wrongText);
         currentStage = (TextView) findViewById(R.id.stage);
 
@@ -69,6 +71,7 @@ public class Memorize extends AppCompatActivity {
             public void onClick(View view) {
                 if ((COUNT + 1) % NUM_OF_PARAGRAPHS == 0) {
                     nextStageScreen();
+                    textSegment.scrollTo(0,0);
                 } else {
                     COUNT++;
                     newSection();
@@ -89,6 +92,8 @@ public class Memorize extends AppCompatActivity {
 
                 COUNT++;
                 newSection();
+
+                textSegment.scrollTo(0,0);
             }
         });
 
