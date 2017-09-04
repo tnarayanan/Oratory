@@ -9,10 +9,11 @@
     <color name="autumn">#763626</color>
     <color name="shadow">#2A3132</color>
 
-    <color name="newColor">#1c775f</color>
+    <color name="newColor">#1c775f</color> <!-- #36e3b4 -->
     <color name="newColorDark">#145947</color>
-    <color name="newColor1">#36e3b4</color>
-    <color name="newColor1Dark">#27b28c</color>
+    <color name="newColor1">#2dc29a</color>
+
+    <color name="newColor1Dark">#25a381</color> <!-- #27b28c -->
     <color name="newColorButton">#23a384</color>
 
     <color name="white">#f4f4f4</color>

@@ -15,11 +15,11 @@
         android:id="@+id/next"
         android:layout_width="90dp"
         android:layout_height="45dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/override"
         android:background="@color/newColorButton"
         android:text="Next"
-        android:textColor="@android:color/white" />
+        android:textColor="@android:color/white"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:id="@+id/record"

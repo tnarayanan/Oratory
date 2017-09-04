@@ -102,6 +102,8 @@ public class Memorize extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                next.setVisibility(View.INVISIBLE);
+                override.setVisibility(View.VISIBLE);
                 if (MODE == "Read") {
                     MODE = "Summarize";
                 } else if (MODE == "Summarize") {
@@ -319,6 +321,7 @@ public class Memorize extends AppCompatActivity {
         }
 
         next.setVisibility(View.VISIBLE);
+        override.setVisibility(View.INVISIBLE);
         record.setVisibility(View.INVISIBLE);
     }
 
