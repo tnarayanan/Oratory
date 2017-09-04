@@ -222,6 +222,10 @@ public class Memorize extends AppCompatActivity {
 
                         for(int i = 0; i < finalCorrect.size();i++){
 
+                            if(finalCorrect.get(i).equals(finalUser.get(i))){
+                                continue;
+                            }
+
                             String correctText = "Correct:";
                             String userText = "You said:";
                             if(i>0){
@@ -265,7 +269,7 @@ public class Memorize extends AppCompatActivity {
 
                         listView.setVisibility(View.VISIBLE);
 
-                        wrongText.setText("You got " + (String) score[0] + "% of words correct / "+finalCorrect.toString()+" / "+finalUser.toString());
+                        wrongText.setText("You got " + (String) score[0] + "% of words correct / " + finalCorrect.toString() + " / "+finalUser.toString());
 
                         if (COUNT >= NUM_OF_PARAGRAPHS) {
                             levelsDown++;
