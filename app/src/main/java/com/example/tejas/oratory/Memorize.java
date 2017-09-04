@@ -218,7 +218,7 @@ public class Memorize extends AppCompatActivity {
                         }
                     } else {
                         Object[] score = getScore(new ArrayList<String>(Arrays.asList(correctWithoutPunc.split(" "))), new ArrayList<String>(Arrays.asList(txtOutput.split(" "))));
-                        List<Map<String, String>> adapterData = new ArrayList<>();
+                        final List<Map<String, String>> adapterData = new ArrayList<>();
                         ArrayList<String> finalCorrect = (ArrayList<String>) ((ArrayList<String>) score[1]).clone();
                         ArrayList<String> finalUser = (ArrayList<String>) ((ArrayList<String>) score[2]).clone();
 
@@ -237,8 +237,9 @@ public class Memorize extends AppCompatActivity {
                                 correctText += " " + finalCorrect.get(i-1);
                                 userText += " " + finalUser.get(i-1);
                             }
-                            correctText += " " + finalCorrect.get(i);
-                            userText += " " + finalUser.get(i);
+
+                            correctText += " <b>" + finalCorrect.get(i) + "</b>";
+                            userText += " <b>" + finalUser.get(i) + "</b>";
 
                             if(i<finalCorrect.size()-1){
                                 correctText += " " + finalCorrect.get(i+1);
@@ -248,7 +249,7 @@ public class Memorize extends AppCompatActivity {
                             if(!finalCorrect.get(i).equals("*") && !finalUser.get(i).equals("*")){
                                 Map<String,String> currentData = new HashMap<>(2);
 
-                                currentData.put("correct",correctText);
+                                currentData.put("correct", correctText);
                                 currentData.put("user", userText);
 
                                 adapterData.add(currentData);
@@ -277,6 +278,10 @@ public class Memorize extends AppCompatActivity {
 
                                 textView1.setTextColor(getResources().getColor(R.color.stone));
                                 textView2.setTextColor(getResources().getColor(R.color.mistDark));
+
+                                textView1.setText(Html.fromHtml(adapterData.get(position).get("correct")));
+                                textView2.setText(Html.fromHtml(adapterData.get(position).get("user")));
+
                                 return view;
                             }
                         };
