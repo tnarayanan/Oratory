@@ -427,6 +427,6 @@ public class Memorize extends AppCompatActivity {
             }
         }
 
-        return String.format("%.2f", 100.0*((double) numCorrect / finalCorrect.size())) + "/" + finalCorrect + "/" + finalUser;
+        return String.format("%.2f", 100.0*((double) numCorrect / finalCorrect.size()));
     }
 }
