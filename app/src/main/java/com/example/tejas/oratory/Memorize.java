@@ -24,6 +24,7 @@ import net.sf.classifier4J.summariser.SimpleSummariser;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -216,6 +217,9 @@ public class Memorize extends AppCompatActivity {
                         ArrayList<String> finalCorrect = (ArrayList<String>) ((ArrayList<String>) score[1]).clone();
                         ArrayList<String> finalUser = (ArrayList<String>) ((ArrayList<String>) score[2]).clone();
 
+                        Collections.reverse(finalCorrect);
+                        Collections.reverse(finalUser);
+
                         for(int i = 0; i < finalCorrect.size();i++){
 
                             String correctText = "Correct:";
@@ -261,7 +265,8 @@ public class Memorize extends AppCompatActivity {
 
                         listView.setVisibility(View.VISIBLE);
 
-                        wrongText.setText("You got " + (String) score[0] + "% of words correct");
+                        wrongText.setText("You got " + (String) score[0] + "% of words correct / "+finalCorrect.toString()+" / "+finalUser.toString());
+
                         if (COUNT >= NUM_OF_PARAGRAPHS) {
                             levelsDown++;
                             if (MODE == "Memorize") {
