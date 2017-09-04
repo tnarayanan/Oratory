@@ -285,6 +285,39 @@ public class Memorize extends AppCompatActivity {
         return ((double) finalCorrect)/(double) (correctText.size());
     }
 
+    /*private double getPercent2(ArrayList<String> userText, ArrayList<String> correctText) {
+        int originalSize = correctText.size();
+        if (userText.size() > correctText.size()) {
+            while(correctText.size() < userText.size()) {
+                correctText.add("");
+            }
+        } else if (correctText.size() > userText.size()) {
+            while(userText.size() < correctText.size()) {
+                userText.add("");
+            }
+        }
+
+        double percent = 0;
+
+        ArrayList<String> cloneUser = (ArrayList<String>) userText.clone();
+        ArrayList<String> cloneCorrect = (ArrayList<String>) correctText.clone();
+
+
+        for (int i = 0; i < correctText.size(); i++) {
+            if (cloneUser.contains(cloneCorrect.get(i))) {
+                cloneUser.remove(cloneUser.indexOf(cloneCorrect.get(i)));
+                cloneCorrect.remove(i);
+            }
+        }
+
+        int wrong = cloneCorrect.size() + cloneUser.size();
+
+
+
+
+
+    } */
+
     private  ArrayList<String> toWords(String str) {
         ArrayList<String> words = new ArrayList<String>();
         String str1 = str;
@@ -394,6 +427,6 @@ public class Memorize extends AppCompatActivity {
             }
         }
 
-        return String.format("%.2f", 100*(numCorrect / finalCorrect.length()));
+        return String.format("%.2f", 100.0*((double) numCorrect / finalCorrect.length())) + "/" + finalCorrect + "/" + finalUser;
     }
 }
