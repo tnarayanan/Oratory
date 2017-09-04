@@ -432,7 +432,7 @@ public class Memorize extends AppCompatActivity {
 
     private Object[] getScore(ArrayList<String> correctStr, ArrayList<String> userStr){
         int match = 1;
-        int gap = -2;
+        int gap = -1;
         int mismatch = -1;
 
         int[][] a = new int[correctStr.size()+1][userStr.size()+1];
