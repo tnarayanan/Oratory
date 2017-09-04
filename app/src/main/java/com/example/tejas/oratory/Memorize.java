@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import net.sf.classifier4J.summariser.SimpleSummariser;
 
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
@@ -197,7 +198,7 @@ public class Memorize extends AppCompatActivity {
                         }
                     } else {
                         wrongText.setText(Html.fromHtml("<b>" + txtOutput + "</b> is what I heard, but <b>" + correctWithoutPunc + "</b> is the answer."
-                                + " You got <b>" + Math.round(getPercent(toWords(txtOutput), toWords(correctWithoutPunc)) * 100) + "% </b> of words correct"));
+                                + " You got <b>" + getScore(new ArrayList<String>(Arrays.asList(correctWithoutPunc.split(" "))), new ArrayList<String>(Arrays.asList(txtOutput.split(" ")))) + "% </b> of words correct"));
                         if (COUNT >= NUM_OF_PARAGRAPHS) {
                             levelsDown++;
                             if (MODE == "Memorize") {
@@ -301,5 +302,98 @@ public class Memorize extends AppCompatActivity {
             }
         }
         return words;
+    }
+
+    private String getScore(ArrayList<String> correctStr, ArrayList<String> userStr){
+        int match = 1;
+        int gap = -2;
+        int mismatch = -1;
+
+        int[][] a = new int[correctStr.size()+1][userStr.size()+1];
+        int[][] reference = new int[correctStr.size()+1][userStr.size()+1];
+
+        for(int i =0; i<correctStr.size()+1; i++){
+            a[i][0] = gap*i;
+        }
+
+        for(int i =0; i<userStr.size()+1; i++){
+            a[0][i] = gap*i;
+        }
+
+        for(int i=1;i<correctStr.size()+1;i++){
+            for(int j=1;j<userStr.size()+1;j++) {
+                int currentPenalty = mismatch;
+                int used = 0;
+                //0 is a[i - 1][j - 1] + currentPenalty, 1 is a[i - 1][j] + gap, 2 is a[i][j - 1] + gap
+
+                if (correctStr.get(i - 1).equals(userStr.get(j - 1))) {
+                    currentPenalty = match;
+                }
+
+                if(a[i - 1][j - 1] + currentPenalty>a[i - 1][j] + gap){
+                    used = 0;
+                } else {
+                    used = 1;
+                }
+
+                if(used==0){
+                    if(a[i - 1][j - 1] + currentPenalty<a[i][j-1] + gap){
+                        used = 2;
+                    } else {
+                        used = 0;
+                    }
+                } else {
+                    if(a[i - 1][j] + gap<a[i][j-1] + gap){
+                        used = 2;
+                    } else {
+                        used = 1;
+                    }
+                }
+
+                a[i][j] = Math.max(a[i - 1][j - 1] + currentPenalty, Math.max(a[i - 1][j] + gap, a[i][j - 1] + gap));
+                reference[i][j] = used;
+            }
+
+        }
+
+        int i = correctStr.size();
+        int j = userStr.size();
+        String finalCorrect = "";
+        String finalUser = "";
+        while(i>0 && j>0){
+            if(reference[i][j]==0){
+                finalCorrect += correctStr.get(i-1);
+                finalUser += userStr.get(j-1);
+                i--;
+                j--;
+            } else if(reference[i][j]==1){
+                finalCorrect += correctStr.get(i-1);
+                finalUser += "*";
+                i--;
+            } else {
+                finalCorrect += "*";
+                finalUser += userStr.get(j-1);
+                j--;
+            }
+
+        }
+
+        int numCorrect = 0;
+
+        while(finalCorrect.length() < finalUser.length()){
+            finalCorrect += "*";
+        }
+
+        while(finalCorrect.length() > finalUser.length()){
+            finalUser += "*";
+        }
+
+        for (int k = 0;k < finalCorrect.length();k++){
+            if(finalUser.charAt(k)==finalCorrect.charAt(k)){
+                numCorrect++;
+            }
+        }
+
+        return String.format("%.2f", 100*(numCorrect / finalCorrect.length()));
     }
 }
