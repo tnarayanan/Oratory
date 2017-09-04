@@ -6,12 +6,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -20,6 +22,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import net.sf.classifier4J.summariser.SimpleSummariser;
+
+import org.w3c.dom.Text;
 
 import java.sql.Array;
 import java.util.ArrayList;
@@ -32,6 +36,7 @@ import java.util.Map;
 
 import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
+import static com.example.tejas.oratory.R.color.stone;
 
 public class Memorize extends AppCompatActivity {
 
@@ -263,7 +268,18 @@ public class Memorize extends AppCompatActivity {
                         }
 
                         SimpleAdapter adapter = new SimpleAdapter(getApplicationContext(), adapterData, android.R.layout.simple_list_item_2,
-                                new String[]{"correct", "user"}, new int[]{android.R.id.text1, android.R.id.text2});
+                                new String[]{"correct", "user"}, new int[]{android.R.id.text1, android.R.id.text2}){
+                            @Override
+                            public View getView(int position, View convertView, ViewGroup parent){
+                                View view = super.getView(position,convertView,parent);
+                                TextView textView1 = (TextView) view.findViewById(android.R.id.text1);
+                                TextView textView2 = (TextView) view.findViewById(android.R.id.text2);
+
+                                textView1.setTextColor(getResources().getColor(R.color.stone));
+                                textView2.setTextColor(getResources().getColor(R.color.mistDark));
+                                return view;
+                            }
+                        };
 
                         listView.setAdapter(adapter);
 
