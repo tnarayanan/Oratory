@@ -2,6 +2,7 @@ package com.example.tejas.oratory;
 
 import android.app.ActivityManager;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,7 +12,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,7 +24,10 @@ import net.sf.classifier4J.summariser.SimpleSummariser;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
@@ -34,6 +41,8 @@ public class Memorize extends AppCompatActivity {
     Button record;
     Button next;
     Button override;
+
+    ListView listView;
 
     final int NUM_OF_PARAGRAPHS = MainActivity.stringParagraphs.size();
     private final int SPEECH_RECOGNITION_CODE = 1;
@@ -60,6 +69,10 @@ public class Memorize extends AppCompatActivity {
         textSegment.setMovementMethod(new ScrollingMovementMethod());
         wrongText = (TextView) findViewById(R.id.wrongText);
         currentStage = (TextView) findViewById(R.id.stage);
+
+        listView = (ListView) findViewById(R.id.listView);
+
+        listView.setVisibility(View.INVISIBLE);
 
         record = (Button) findViewById(R.id.record);
         next = (Button) findViewById(R.id.next);
@@ -113,6 +126,7 @@ public class Memorize extends AppCompatActivity {
         record.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                listView.setVisibility(View.INVISIBLE);
                 startSpeechToText();
             }
         });
@@ -197,8 +211,57 @@ public class Memorize extends AppCompatActivity {
                             }
                         }
                     } else {
-                        wrongText.setText(Html.fromHtml("<b>" + txtOutput + "</b> is what I heard, but <b>" + correctWithoutPunc + "</b> is the answer."
-                                + " You got <b>" + getScore(new ArrayList<String>(Arrays.asList(correctWithoutPunc.split(" "))), new ArrayList<String>(Arrays.asList(txtOutput.split(" ")))) + "% </b> of words correct"));
+                        Object[] score = getScore(new ArrayList<String>(Arrays.asList(correctWithoutPunc.split(" "))), new ArrayList<String>(Arrays.asList(txtOutput.split(" "))));
+                        List<Map<String, String>> adapterData = new ArrayList<>();
+                        ArrayList<String> finalCorrect = (ArrayList<String>) ((ArrayList<String>) score[1]).clone();
+                        ArrayList<String> finalUser = (ArrayList<String>) ((ArrayList<String>) score[2]).clone();
+
+                        for(int i = 0; i < finalCorrect.size();i++){
+
+                            String correctText = "Correct:";
+                            String userText = "You said:";
+                            if(i>0){
+                                correctText += " " + finalCorrect.get(i-1);
+                                userText += " " + finalUser.get(i-1);
+                            }
+                            correctText += " " + finalCorrect.get(i);
+                            userText += " " + finalUser.get(i);
+
+                            if(i<finalCorrect.size()-1){
+                                correctText += " " + finalCorrect.get(i+1);
+                                userText += " " + finalUser.get(i+1);
+                            }
+
+                            if(!finalCorrect.get(i).equals("*") && !finalUser.get(i).equals("*")){
+                                Map<String,String> currentData = new HashMap<>(2);
+
+                                currentData.put("correct",correctText);
+                                currentData.put("user", userText);
+
+                                adapterData.add(currentData);
+
+                            } else if(finalCorrect.get(i).equals("*")){
+                                Map<String,String> currentData = new HashMap<>(2);
+                                currentData.put("correct","You added an extra word");
+                                currentData.put("user", userText);
+                                adapterData.add(currentData);
+
+                            } else {
+                                Map<String,String> currentData = new HashMap<>(2);
+                                currentData.put("correct",correctText);
+                                currentData.put("user", "You missed this word");
+                                adapterData.add(currentData);
+                            }
+                        }
+
+                        SimpleAdapter adapter = new SimpleAdapter(getApplicationContext(), adapterData, android.R.layout.simple_list_item_2,
+                                new String[]{"correct", "user"}, new int[]{android.R.id.text1, android.R.id.text2});
+
+                        listView.setAdapter(adapter);
+
+                        listView.setVisibility(View.VISIBLE);
+
+                        wrongText.setText("You got " + (String) score[0] + "% of words correct");
                         if (COUNT >= NUM_OF_PARAGRAPHS) {
                             levelsDown++;
                             if (MODE == "Memorize") {
@@ -337,7 +400,7 @@ public class Memorize extends AppCompatActivity {
         return words;
     }
 
-    private String getScore(ArrayList<String> correctStr, ArrayList<String> userStr){
+    private Object[] getScore(ArrayList<String> correctStr, ArrayList<String> userStr){
         int match = 1;
         int gap = -2;
         int mismatch = -1;
@@ -427,6 +490,6 @@ public class Memorize extends AppCompatActivity {
             }
         }
 
-        return String.format("%.2f", 100.0*((double) numCorrect / finalCorrect.size()));
+        return new Object[] {String.format("%.2f", 100.0*((double) numCorrect / finalCorrect.size())), finalCorrect,finalUser};
     }
 }
