@@ -238,8 +238,8 @@ public class Memorize extends AppCompatActivity {
                                 userText += " " + finalUser.get(i-1);
                             }
 
-                            correctText += " <b>" + finalCorrect.get(i) + "</b>";
-                            userText += " <b>" + finalUser.get(i) + "</b>";
+                            correctText += " <b><u>" + finalCorrect.get(i) + "</u></b>";
+                            userText += " <b><u>" + finalUser.get(i) + "</u></b>";
 
                             if(i<finalCorrect.size()-1){
                                 correctText += " " + finalCorrect.get(i+1);
