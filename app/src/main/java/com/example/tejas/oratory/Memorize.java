@@ -2,19 +2,17 @@ package com.example.tejas.oratory;
 
 import android.app.ActivityManager;
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -23,9 +21,6 @@ import android.widget.Toast;
 
 import net.sf.classifier4J.summariser.SimpleSummariser;
 
-import org.w3c.dom.Text;
-
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -36,7 +31,6 @@ import java.util.Map;
 
 import static android.widget.Toast.LENGTH_SHORT;
 import static android.widget.Toast.makeText;
-import static com.example.tejas.oratory.R.color.stone;
 
 public class Memorize extends AppCompatActivity {
 
@@ -65,8 +59,8 @@ public class Memorize extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_memorize);
-        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.logo);
-        int color = getResources().getColor(R.color.white);
+        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.roundedlogo);
+        int color = ContextCompat.getColor(getApplicationContext(), R.color.white);
         setTaskDescription(new ActivityManager.TaskDescription("Oratory", icon, color));
 
         //for color
@@ -89,12 +83,18 @@ public class Memorize extends AppCompatActivity {
         override.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if ((COUNT + 1) % NUM_OF_PARAGRAPHS == 0) {
-                    nextStageScreen();
-                    textSegment.scrollTo(0,0);
+                listView.setVisibility(View.INVISIBLE);
+                wrongText.setText("");
+                if (levelsDown > 0) {
+                    upOneLevel();
                 } else {
-                    COUNT++;
-                    newSection();
+                    if ((COUNT + 1) % NUM_OF_PARAGRAPHS == 0) {
+                        nextStageScreen();
+                        textSegment.scrollTo(0, 0);
+                    } else {
+                        COUNT++;
+                        newSection();
+                    }
                 }
             }
         });
@@ -104,9 +104,9 @@ public class Memorize extends AppCompatActivity {
             public void onClick(View view) {
                 next.setVisibility(View.INVISIBLE);
                 override.setVisibility(View.VISIBLE);
-                if (MODE == "Read") {
+                if (MODE.equals("Read")) {
                     MODE = "Summarize";
-                } else if (MODE == "Summarize") {
+                } else if (MODE.equals("Summarize")) {
                     MODE = "Memorize";
                 }
                 nextStageMoved = true;
@@ -186,8 +186,7 @@ public class Memorize extends AppCompatActivity {
                 if (resultCode == RESULT_OK && null != data) {
                     ArrayList<String> result = data
                             .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    String text = result.get(0);
-                    txtOutput = text;
+                    txtOutput = result.get(0);
                     txtOutput = txtOutput.toLowerCase();
                     String correctWithoutPunc = removePunctuation(textSegment.getText().toString()).toLowerCase();
 
@@ -197,14 +196,7 @@ public class Memorize extends AppCompatActivity {
                         wrongText.setText("");
                         if (levelsDown > 0) {
                             System.out.println("BAD------------------------------");
-                            levelsDown--;
-                            if (MODE == "Read") {
-                                MODE = "Summarize";
-                            } else if (MODE == "Summarize") {
-                                MODE = "Memorize";
-                            }
-                            COUNT += NUM_OF_PARAGRAPHS;
-                            newSection();
+                            upOneLevel();
 
                         } else {
                             System.out.println("Here----------------");
@@ -219,7 +211,7 @@ public class Memorize extends AppCompatActivity {
                             }
                         }
                     } else {
-                        Object[] score = getScore(new ArrayList<String>(Arrays.asList(correctWithoutPunc.split(" "))), new ArrayList<String>(Arrays.asList(txtOutput.split(" "))));
+                        Object[] score = getScore(new ArrayList<>(Arrays.asList(correctWithoutPunc.split(" "))), new ArrayList<>(Arrays.asList(txtOutput.split(" "))));
                         final List<Map<String, String>> adapterData = new ArrayList<>();
                         ArrayList<String> finalCorrect = (ArrayList<String>) ((ArrayList<String>) score[1]).clone();
                         ArrayList<String> finalUser = (ArrayList<String>) ((ArrayList<String>) score[2]).clone();
@@ -278,8 +270,8 @@ public class Memorize extends AppCompatActivity {
                                 TextView textView1 = (TextView) view.findViewById(android.R.id.text1);
                                 TextView textView2 = (TextView) view.findViewById(android.R.id.text2);
 
-                                textView1.setTextColor(getResources().getColor(R.color.stone));
-                                textView2.setTextColor(getResources().getColor(R.color.mistDark));
+                                textView1.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.stone));
+                                textView2.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.mistDark));
 
                                 textView1.setText(Html.fromHtml(adapterData.get(position).get("correct")));
                                 textView2.setText(Html.fromHtml(adapterData.get(position).get("user")));
@@ -292,13 +284,13 @@ public class Memorize extends AppCompatActivity {
 
                         listView.setVisibility(View.VISIBLE);
 
-                        wrongText.setText("You got " + (String) score[0] + "% of words correct / " + finalCorrect.toString() + " / "+finalUser.toString());
+                        wrongText.setText("You got " + score[0] + "% of words correct / " + finalCorrect.toString() + " / "+finalUser.toString());
 
                         if (COUNT >= NUM_OF_PARAGRAPHS) {
                             levelsDown++;
-                            if (MODE == "Memorize") {
+                            if (MODE.equals("Memorize")) {
                                 MODE = "Summarize";
-                            } else if (MODE == "Summarize") {
+                            } else if (MODE.equals("Summarize")) {
                                 MODE = "Read";
                             }
                             COUNT -= NUM_OF_PARAGRAPHS;
@@ -310,6 +302,17 @@ public class Memorize extends AppCompatActivity {
                 break;
             }
         }
+    }
+
+    private void upOneLevel() {
+        levelsDown--;
+        if (MODE.equals("Read")) {
+            MODE = "Summarize";
+        } else if (MODE.equals("Summarize")) {
+            MODE = "Memorize";
+        }
+        COUNT += NUM_OF_PARAGRAPHS;
+        newSection();
     }
 
     private void nextStageScreen() {
@@ -328,13 +331,13 @@ public class Memorize extends AppCompatActivity {
     private String removePunctuation(String str) {
         String newString = str;
         String[] punctuation = {"/", ".", ",", "\"", ";", ":", "(", ")", "!", "?", "-"};
-        for(int i = 0; i < punctuation.length; i++){
-            newString = newString.replace(punctuation[i], "");
+        for (String aPunctuation : punctuation) {
+            newString = newString.replace(aPunctuation, "");
         }
         return newString;
     }
 
-    private double getPercent(ArrayList<String> userText, ArrayList<String> correctText) {
+    /*private double getPercent(ArrayList<String> userText, ArrayList<String> correctText) {
         int correct1 = 0;
         int correct2 = 0;
 
@@ -379,7 +382,7 @@ public class Memorize extends AppCompatActivity {
         int finalCorrect = Math.min(correct1, correct2);
 
         return ((double) finalCorrect)/(double) (correctText.size());
-    }
+    }*/
 
     /*private double getPercent2(ArrayList<String> userText, ArrayList<String> correctText) {
         int originalSize = correctText.size();
@@ -414,20 +417,19 @@ public class Memorize extends AppCompatActivity {
 
     } */
 
-    private  ArrayList<String> toWords(String str) {
-        ArrayList<String> words = new ArrayList<String>();
-        String str1 = str;
+    private ArrayList<String> toWords(String str) {
+        ArrayList<String> words = new ArrayList<>();
         int lastWord = 0;
         for(int i = 0; i < str.length(); i++){
-            if(Character.toString(str1.charAt(i)).equals(" ") || Character.toString(str1.charAt(i)).equals("!") || Character.toString(str1.charAt(i)).equals("?") || Character.toString(str1.charAt(i)).equals(".")){
-                words.add(str1.substring(lastWord, i));
-                if(Character.toString(str1.charAt(i)).equals(".") || Character.toString(str1.charAt(i)).equals("!") || Character.toString(str1.charAt(i)).equals("?")){
+            if(Character.toString(str.charAt(i)).equals(" ") || Character.toString(str.charAt(i)).equals("!") || Character.toString(str.charAt(i)).equals("?") || Character.toString(str.charAt(i)).equals(".")){
+                words.add(str.substring(lastWord, i));
+                if(Character.toString(str.charAt(i)).equals(".") || Character.toString(str.charAt(i)).equals("!") || Character.toString(str.charAt(i)).equals("?")){
                     lastWord = i + 2;
                 } else {
                     lastWord = i + 1;
                 }
-            } else if (i == str1.length() - 1) {
-                words.add(str1.substring(lastWord));
+            } else if (i == str.length() - 1) {
+                words.add(str.substring(lastWord));
             }
         }
         return words;
@@ -452,7 +454,7 @@ public class Memorize extends AppCompatActivity {
         for(int i=1;i<correctStr.size()+1;i++){
             for(int j=1;j<userStr.size()+1;j++) {
                 int currentPenalty = mismatch;
-                int used = 0;
+                int used;
                 //0 is a[i - 1][j - 1] + currentPenalty, 1 is a[i - 1][j] + gap, 2 is a[i][j - 1] + gap
 
                 if (correctStr.get(i - 1).equals(userStr.get(j - 1))) {
@@ -509,6 +511,18 @@ public class Memorize extends AppCompatActivity {
 
         int numCorrect = 0;
 
+        while (j > 0) {
+            finalUser.add(userStr.get(j-1));
+            finalCorrect.add("*");
+            j--;
+        }
+
+        while (i > 0) {
+            finalUser.add("*");
+            finalCorrect.add(correctStr.get(i-1));
+            i--;
+        }
+        /*
         while(finalCorrect.size() < finalUser.size()){
             finalCorrect.add("*");
         }
@@ -516,7 +530,7 @@ public class Memorize extends AppCompatActivity {
         while(finalCorrect.size() > finalUser.size()){
             finalUser.add("*");
         }
-
+        */
         for (int k = 0;k < finalCorrect.size();k++){
             if(finalUser.get(k).equals(finalCorrect.get(k))){
                 numCorrect++;

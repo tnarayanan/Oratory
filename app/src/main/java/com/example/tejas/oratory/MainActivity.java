@@ -1,29 +1,27 @@
 package com.example.tejas.oratory;
 
 import android.app.ActivityManager;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.app.AlertDialog;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
     Button progress;
@@ -44,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.roundedlogo);
-        int color = getResources().getColor(R.color.white);
+        int color = ContextCompat.getColor(getApplicationContext(), R.color.white);
         setTaskDescription(new ActivityManager.TaskDescription("Oratory", icon, color));
         fullText = (EditText)findViewById(R.id.fullText);
         topText = (TextView)findViewById(R.id.topText);
