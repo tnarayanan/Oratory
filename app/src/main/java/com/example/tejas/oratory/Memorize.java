@@ -391,21 +391,21 @@ public class Memorize extends AppCompatActivity {
 
         int i = correctStr.size();
         int j = userStr.size();
-        String finalCorrect = "";
-        String finalUser = "";
+        ArrayList<String> finalCorrect = new ArrayList<>();
+        ArrayList<String> finalUser = new ArrayList<>();
         while(i>0 && j>0){
             if(reference[i][j]==0){
-                finalCorrect += correctStr.get(i-1);
-                finalUser += userStr.get(j-1);
+                finalCorrect.add(correctStr.get(i-1));
+                finalUser.add(userStr.get(j-1));
                 i--;
                 j--;
             } else if(reference[i][j]==1){
-                finalCorrect += correctStr.get(i-1);
-                finalUser += "*";
+                finalCorrect.add(correctStr.get(i-1));
+                finalUser.add("*");
                 i--;
             } else {
-                finalCorrect += "*";
-                finalUser += userStr.get(j-1);
+                finalCorrect.add("*");
+                finalUser.add(userStr.get(j-1));
                 j--;
             }
 
@@ -413,20 +413,20 @@ public class Memorize extends AppCompatActivity {
 
         int numCorrect = 0;
 
-        while(finalCorrect.length() < finalUser.length()){
-            finalCorrect += "*";
+        while(finalCorrect.size() < finalUser.size()){
+            finalCorrect.add("*");
         }
 
-        while(finalCorrect.length() > finalUser.length()){
-            finalUser += "*";
+        while(finalCorrect.size() > finalUser.size()){
+            finalUser.add("*");
         }
 
-        for (int k = 0;k < finalCorrect.length();k++){
-            if(finalUser.charAt(k)==finalCorrect.charAt(k)){
+        for (int k = 0;k < finalCorrect.size();k++){
+            if(finalUser.get(k).equals(finalCorrect.get(k))){
                 numCorrect++;
             }
         }
 
-        return String.format("%.2f", 100.0*((double) numCorrect / finalCorrect.length())) + "/" + finalCorrect + "/" + finalUser;
+        return String.format("%.2f", 100.0*((double) numCorrect / finalCorrect.size())) + "/" + finalCorrect + "/" + finalUser;
     }
 }
