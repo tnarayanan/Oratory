@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.circlelogo);
+        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.roundedlogo);
         int color = getResources().getColor(R.color.white);
         setTaskDescription(new ActivityManager.TaskDescription("Oratory", icon, color));
         fullText = (EditText)findViewById(R.id.fullText);
