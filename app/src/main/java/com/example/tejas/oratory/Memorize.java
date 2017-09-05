@@ -11,8 +11,10 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -21,6 +23,7 @@ import android.widget.Toast;
 
 import net.sf.classifier4J.summariser.SimpleSummariser;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -62,6 +65,10 @@ public class Memorize extends AppCompatActivity {
         Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.roundedlogo);
         int color = ContextCompat.getColor(getApplicationContext(), R.color.white);
         setTaskDescription(new ActivityManager.TaskDescription("Oratory", icon, color));
+
+        Window window = this.getWindow();
+        window.setStatusBarColor(ContextCompat.getColor(getApplicationContext() ,R.color.colorPrimaryDark));
+
 
         //for color
         // getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#90AFC5")));
@@ -211,7 +218,10 @@ public class Memorize extends AppCompatActivity {
                             }
                         }
                     } else {
-                        Object[] score = getScore(new ArrayList<>(Arrays.asList(correctWithoutPunc.split(" "))), new ArrayList<>(Arrays.asList(txtOutput.split(" "))));
+                        ArrayList<String> finalCorrectNoSymbol = new ArrayList<>(Arrays.asList(correctWithoutPunc.split(" ")));
+                        ArrayList<String> finalUserNoSymbol = new ArrayList<>(Arrays.asList(txtOutput.split(" ")));
+
+                        Object[] score = getScore(finalCorrectNoSymbol, finalUserNoSymbol);
                         final List<Map<String, String>> adapterData = new ArrayList<>();
                         ArrayList<String> finalCorrect = (ArrayList<String>) ((ArrayList<String>) score[1]).clone();
                         ArrayList<String> finalUser = (ArrayList<String>) ((ArrayList<String>) score[2]).clone();
@@ -219,26 +229,58 @@ public class Memorize extends AppCompatActivity {
                         Collections.reverse(finalCorrect);
                         Collections.reverse(finalUser);
 
+                        Collections.reverse(finalCorrectNoSymbol);
+                        Collections.reverse(finalUserNoSymbol);
+
                         for(int i = 0; i < finalCorrect.size();i++){
 
                             if(finalCorrect.get(i).equals(finalUser.get(i))){
                                 continue;
                             }
 
+                            int correctIndexBefore = i - 1;
+                            int correctIndexAfter = i + 1;
+
+                            int userIndexBefore = i - 1;
+                            int userIndexAfter =  i + 1;
+
+                            while (correctIndexBefore >= 0 && finalCorrect.get(correctIndexBefore).equals("*")) {
+                                correctIndexBefore--;
+                            }
+
+                            while (correctIndexAfter < finalCorrect.size() && finalCorrect.get(correctIndexAfter).equals("*")) {
+                                correctIndexAfter++;
+                            }
+
+                            while (userIndexBefore >= 0 && finalUser.get(userIndexBefore).equals("*")) {
+                                userIndexBefore--;
+                            }
+
+                            while (userIndexAfter < finalUser.size() && finalUser.get(userIndexAfter).equals("*")) {
+                                userIndexAfter++;
+                            }
+
+                            // Hello hi this is a test
+                            // Hello hello * is a test
+
+
                             String correctText = "Correct:";
                             String userText = "You said:";
-                            if(i>0){
-                                correctText += " " + finalCorrect.get(i-1);
-                                userText += " " + finalUser.get(i-1);
-                            }
+
+                            /*int indexInCorrectNoSymbol = finalCorrectNoSymbol.indexOf(finalCorrect.get(i));
+                            int indexInUserNoSymbol = finalUserNoSymbol.indexOf(finalUser.get(i));
+
+                            Log.e("CorrectNoSymbol", finalCorrectNoSymbol.toString());
+                            Log.e("UserNoSymbol", finalUserNoSymbol.toString());*/
+
+                            if (correctIndexBefore > -1) correctText += " " + finalCorrect.get(correctIndexBefore);
+                            if (userIndexBefore > -1) userText += " " + finalUser.get(userIndexBefore);
 
                             correctText += " <b><u>" + finalCorrect.get(i) + "</u></b>";
                             userText += " <b><u>" + finalUser.get(i) + "</u></b>";
 
-                            if(i<finalCorrect.size()-1){
-                                correctText += " " + finalCorrect.get(i+1);
-                                userText += " " + finalUser.get(i+1);
-                            }
+                            if (correctIndexAfter < finalCorrect.size()) correctText += " " + finalCorrect.get(correctIndexAfter);
+                            if (userIndexAfter < finalUser.size()) userText += " " + finalUser.get(userIndexAfter);
 
                             if(!finalCorrect.get(i).equals("*") && !finalUser.get(i).equals("*")){
                                 Map<String,String> currentData = new HashMap<>(2);
@@ -495,15 +537,19 @@ public class Memorize extends AppCompatActivity {
             if(reference[i][j]==0){
                 finalCorrect.add(correctStr.get(i-1));
                 finalUser.add(userStr.get(j-1));
+
+
                 i--;
                 j--;
             } else if(reference[i][j]==1){
                 finalCorrect.add(correctStr.get(i-1));
                 finalUser.add("*");
+
                 i--;
             } else {
                 finalCorrect.add("*");
                 finalUser.add(userStr.get(j-1));
+
                 j--;
             }
 

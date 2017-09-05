@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -27,6 +28,10 @@ public class LoadActivity extends AppCompatActivity {
         Bitmap icon = BitmapFactory.decodeResource(getResources(), R.drawable.roundedlogo);
         int color = ContextCompat.getColor(getApplicationContext(), R.color.white);
         setTaskDescription(new ActivityManager.TaskDescription("Oratory", icon, color));
+
+        Window window = this.getWindow();
+        window.setStatusBarColor(ContextCompat.getColor(getApplicationContext() ,R.color.colorPrimaryDark));
+
 
         listView = (ListView) findViewById(R.id.listView);
 

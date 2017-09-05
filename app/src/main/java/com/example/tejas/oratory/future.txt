@@ -1,3 +1,5 @@
 Deleting single speeches
 Drive integration
 Better summarization
+Better UI
+Saving progress
