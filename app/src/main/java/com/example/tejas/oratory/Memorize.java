@@ -154,6 +154,7 @@ public class Memorize extends AppCompatActivity {
                 finalMode = textSegment.getText().toString();
                 break;
             case "Summarize":
+                textSegment.setVisibility(View.INVISIBLE);
                 SimpleSummariser summariser = new SimpleSummariser();
                 String summarisedText = summariser.summarise(textSegment.getText().toString(), 2);
                 int prevSentenceEnd = 0;
@@ -170,6 +171,7 @@ public class Memorize extends AppCompatActivity {
                 }
                 break;
             case "Memorize":
+                textSegment.setVisibility(View.INVISIBLE);
                 finalMode = "";
         }
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -199,6 +201,7 @@ public class Memorize extends AppCompatActivity {
 
                     if (txtOutput.equals(correctWithoutPunc)) {
                         wrongText.setText("");
+                        textSegment.setVisibility(View.VISIBLE);
                         Toast.makeText(getApplicationContext(), "Correct!", Toast.LENGTH_LONG).show();
                         wrongText.setText("");
                         if (levelsDown > 0) {
@@ -218,6 +221,8 @@ public class Memorize extends AppCompatActivity {
                             }
                         }
                     } else {
+                        textSegment.setVisibility(View.VISIBLE);
+
                         ArrayList<String> finalCorrectNoSymbol = new ArrayList<>(Arrays.asList(correctWithoutPunc.split(" ")));
                         ArrayList<String> finalUserNoSymbol = new ArrayList<>(Arrays.asList(txtOutput.split(" ")));
 
