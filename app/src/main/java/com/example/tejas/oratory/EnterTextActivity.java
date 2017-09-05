@@ -63,7 +63,7 @@ public class EnterTextActivity extends AppCompatActivity {
                 builder.setTitle("Speech Title");
 
                 // Set up the input
-                final EditText input = new EditText(getApplicationContext());
+                final EditText input = new EditText(context);
                 // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
                 input.setInputType(InputType.TYPE_CLASS_TEXT);
                 builder.setView(input);
@@ -110,7 +110,7 @@ public class EnterTextActivity extends AppCompatActivity {
                                 outputStream.close();
                             } else {
                                 //Toast.makeText(getApplicationContext(), "EXISTS", Toast.LENGTH_LONG).show();
-                                new AlertDialog.Builder(getApplicationContext())
+                                new AlertDialog.Builder(context)
                                         .setTitle("Duplicate Title")
                                         .setMessage("Please enter a different title for the speech.")
                                         .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
