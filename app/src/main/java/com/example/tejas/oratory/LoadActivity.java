@@ -1,12 +1,16 @@
 package com.example.tejas.oratory;
 
+import android.support.v7.app.ActionBar;
 import android.app.ActivityManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -14,12 +18,25 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class LoadActivity extends AppCompatActivity {
 
     ListView listView;
+    MenuItem editButton;
+    MenuItem deleteButton;
+
+    ArrayAdapter<String> adapter;
+
+    //ActionBar actionBar = getSupportActionBar();
+
+    int itemSelected = -1;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +49,7 @@ public class LoadActivity extends AppCompatActivity {
         Window window = this.getWindow();
         window.setStatusBarColor(ContextCompat.getColor(getApplicationContext() ,R.color.colorPrimaryDark));
 
+        //setActionBarColor(actionBar, R.color.colorPrimary);
 
         listView = (ListView) findViewById(R.id.listView);
 
@@ -60,7 +78,7 @@ public class LoadActivity extends AppCompatActivity {
 
             outputStream.write(str.getBytes());*/
 
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(LoadActivity.this, android.R.layout.simple_list_item_1);
+            adapter = new ArrayAdapter<>(LoadActivity.this, android.R.layout.simple_list_item_1);
 
             /*BufferedReader br = new BufferedReader(new FileReader(new File(getFilesDir(), "speeches")));
 
@@ -91,41 +109,74 @@ public class LoadActivity extends AppCompatActivity {
 
             listView.setAdapter(adapter);
 
+            listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    // show menu buttons
+
+                    buttonsVisible(true);
+
+                    // Do animation of flip image
+
+                    // Set variable to which item is selected
+
+                    itemSelected = position;
+
+
+                    return false;
+                }
+            });
+
+
+
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    System.out.println(position);
-                    int i = -1;
-                    MainActivity.stringParagraphs.clear();
-                    try {
-                        InputStream inputStream = openFileInput("speeches.txt");
 
-                        if (inputStream != null) {
-                            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                            String recieveString;
-                            while ((recieveString = bufferedReader.readLine()) != null) {
-                                if (recieveString.equals("   ")) {
-                                    i++;
-                                    if (position == i) {
-                                        bufferedReader.readLine();
-                                        while ((recieveString = bufferedReader.readLine()) != null && !(recieveString.equals("   "))) {
-                                            MainActivity.stringParagraphs.add(recieveString);
+                    if (itemSelected != -1) {
+                        itemSelected = -1;
+
+                        // animation back
+
+                        // hide menu buttons
+
+                        buttonsVisible(false);
+                    } else {
+
+                        System.out.println(position);
+                        int i = -1;
+                        MainActivity.stringParagraphs.clear();
+                        try {
+                            InputStream inputStream = openFileInput("speeches.txt");
+
+                            if (inputStream != null) {
+                                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                                String recieveString;
+                                while ((recieveString = bufferedReader.readLine()) != null) {
+                                    if (recieveString.equals("   ")) {
+                                        i++;
+                                        if (position == i) {
+                                            bufferedReader.readLine();
+                                            while ((recieveString = bufferedReader.readLine()) != null && !(recieveString.equals("   "))) {
+                                                MainActivity.stringParagraphs.add(recieveString);
+                                            }
                                         }
                                     }
                                 }
+
+                                bufferedReader.close();
+
+                                System.out.println(MainActivity.stringParagraphs.toString());
+
+                                Intent intent = new Intent(getApplicationContext(), Memorize.class);
+                                startActivity(intent);
+
                             }
-
-                            bufferedReader.close();
-
-                            System.out.println(MainActivity.stringParagraphs.toString());
-
-                            Intent intent = new Intent(getApplicationContext(), Memorize.class);
-                            startActivity(intent);
-
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
                     }
                 }
             });
@@ -133,5 +184,72 @@ public class LoadActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.loadmenu, menu);
+
+        editButton = menu.findItem(R.id.editButton);
+        deleteButton = menu.findItem(R.id.deleteButton);
+
+        buttonsVisible(false);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.editButton:
+
+                break;
+            case R.id.deleteButton:
+                try {
+                    deleteSpeech(adapter.getItem(itemSelected));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
+            default:
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void buttonsVisible(boolean visible) {
+        editButton.setVisible(visible);
+        deleteButton.setVisible(visible);
+    }
+
+    private void setActionBarColor(ActionBar bar, int r) {
+        bar.setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(getApplicationContext(), r)));
+    }
+
+    private void deleteSpeech(String s) throws IOException {
+
+        File newSpeeches = new File("newSpeeches.txt");
+        newSpeeches.createNewFile();
+
+        FileOutputStream outputStream = new FileOutputStream(newSpeeches, false);
+        InputStream inputStream = openFileInput("speeches.txt");
+        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+        BufferedReader br = new BufferedReader(inputStreamReader);
+
+        String currLine;
+        while((currLine = br.readLine()) != null) {
+            if (!currLine.equals(s)) {
+                outputStream.write((currLine + "\n").getBytes());
+            } else {
+                while ((currLine = br.readLine()) != null && !currLine.equals("   ")) {}
+            }
+        }
+
+        File oldSpeeches = new File("speeches.txt");
+        oldSpeeches.delete();
+        newSpeeches.renameTo(oldSpeeches);
     }
 }
