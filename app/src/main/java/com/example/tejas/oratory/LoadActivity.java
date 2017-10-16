@@ -9,6 +9,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,9 +33,10 @@ public class LoadActivity extends AppCompatActivity {
 
     ArrayAdapter<String> adapter;
 
-    //ActionBar actionBar = getSupportActionBar();
+    ActionBar actionBar;
 
     int itemSelected = -1;
+    Window window;
 
 
 
@@ -46,10 +48,11 @@ public class LoadActivity extends AppCompatActivity {
         int color = ContextCompat.getColor(getApplicationContext(), R.color.white);
         setTaskDescription(new ActivityManager.TaskDescription("Oratory", icon, color));
 
-        Window window = this.getWindow();
+        window = this.getWindow();
         window.setStatusBarColor(ContextCompat.getColor(getApplicationContext() ,R.color.colorPrimaryDark));
 
-        //setActionBarColor(actionBar, R.color.colorPrimary);
+        actionBar = getSupportActionBar();
+        setActionBarColor(actionBar, R.color.colorPrimary);
 
         listView = (ListView) findViewById(R.id.listView);
 
@@ -116,6 +119,7 @@ public class LoadActivity extends AppCompatActivity {
                     // show menu buttons
 
                     buttonsVisible(true);
+                    setActionBarColor(actionBar, R.color.mistDark);
 
                     // Do animation of flip image
 
@@ -124,7 +128,7 @@ public class LoadActivity extends AppCompatActivity {
                     itemSelected = position;
 
 
-                    return false;
+                    return true;
                 }
             });
 
@@ -142,6 +146,7 @@ public class LoadActivity extends AppCompatActivity {
                         // hide menu buttons
 
                         buttonsVisible(false);
+                        setActionBarColor(actionBar, R.color.colorPrimary);
                     } else {
 
                         System.out.println(position);
@@ -227,6 +232,9 @@ public class LoadActivity extends AppCompatActivity {
 
     private void setActionBarColor(ActionBar bar, int r) {
         bar.setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(getApplicationContext(), r)));
+        bar.setTitle(Html.fromHtml("<font color='#ffffff'>Load a Speech</font>"));
+        if (r == R.color.colorPrimary) window.setStatusBarColor(ContextCompat.getColor(getApplicationContext() ,R.color.colorPrimaryDark));
+        else if (r == R.color.mistDark) window.setStatusBarColor(ContextCompat.getColor(getApplicationContext() ,R.color.stone));
     }
 
     private void deleteSpeech(String s) throws IOException {
